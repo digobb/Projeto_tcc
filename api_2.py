@@ -56,4 +56,10 @@ def retorna_partidas():
     print(response.json())
     return response.json()
 
-retorna_partidas()
+def retorna_jogos_ao_vivo():
+    url_api  = f'{url}/ao-vivo'
+    response = requests.request("GET", url_api, headers=headers)
+    status   = requests.get(url_api, headers=headers)
+    print(f'---------------------- status: {status} ----------------------')
+    print(response.json())
+    return response.json()
