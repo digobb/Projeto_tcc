@@ -26,4 +26,3 @@ for index, column in df_jogos_aovivo.iterrows():
 
 
 df_jogos_aovivo.to_csv(r"C:\Users\didico\Documents\arquivos\teste_dtf.csv", encoding='utf-8', index=False)
-#print(df_jogos_aovivo.loc[0, "campeonato"])
