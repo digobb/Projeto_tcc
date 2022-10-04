@@ -1,37 +1,65 @@
 import requests
+from requests.structures import CaseInsensitiveDict
 
-url = "https://livescore-football.p.rapidapi.com/soccer"
+url                      = "https://api.api-futebol.com.br/v1"
+headers                  = CaseInsensitiveDict()
+headers["Accept"]        = "application/json"
+headers["Authorization"] = "Bearer test_5ad63cd33369753b1cb8a002e02180"
 
-headers = {
-	"X-RapidAPI-Key": "fc0036384cmsh0fd566e2293b5bap1fc36ajsnf41c84bc83bd",
-	"X-RapidAPI-Host": "livescore-football.p.rapidapi.com"
-}
+# DADOS CAMPEONATO BRASILEIRAO
+def retorna_campeonatos():
+    url_api     = f'{url}/campeonatos'
+    response    = requests.request("GET", url_api, headers=headers)
+    status      = requests.get(url_api, headers=headers)
+    print(f'---------------------- status: {status} ----------------------')
+    print(response.json())
+    return response
 
-def retorna_code_countries():
-	codes_countries = f'{url}/countries'
-	response       = requests.request("GET", codes_countries, headers=headers)
-	print(response.text)
-	return response
+def retorna_campeonato_brasileiro():
+    url_api  = f'{url}/campeonatos/10'
+    response = requests.request("GET", url_api, headers=headers)
+    status   = requests.get(url_api, headers=headers)
+    print(f'---------------------- status: {status} ----------------------')
+    print(response.json())
+    return response
 
-def retorna_ligas():
-	leagues     = f'{url}/leagues-by-country'
-	querystring = {"country_code": "brazil"}
-	response    = requests.request("GET", leagues, headers=headers, params=querystring)
-	print(response.text)
-	return response
+def retorna_tabela_campeonato_brasileiro():
+    url_api  = f'{url}/campeonatos/10/tabela'
+    response = requests.request("GET", url_api, headers=headers)
+    status   = requests.get(url_api, headers=headers)
+    print(f'---------------------- status: {status} ----------------------')
+    print(response.json())
+    return response
 
-def dados_campeonato_brasileiro():
-	campeonato_brasileiro = f'{url}/matches-by-league'
-	querystring           = {"country_code": "brazil", "league_code": "brasileiro-u20-group-a", "timezone_utc": "0:00"}
-	response 			  = requests.request("GET", campeonato_brasileiro, headers=headers, params=querystring)
-	print(response.text)
-	return response
+def retorna_artilheiros_campeonato_brasileiro():
+    url_api  = f'{url}/campeonatos/10/artilharia'
+    response = requests.request("GET", url_api, headers=headers)
+    status   = requests.get(url_api, headers=headers)
+    print(f'---------------------- status: {status} ----------------------')
+    print(response.json())
+    return response
 
-def partidas_do_dia():
-	partidas_dia = f'{url}/matches-by-date'
-	querystring = {"date":"20201017","league_code":"premier-league","timezone_utc":"0:00","country_code":"england"}
-	response     = requests.request("GET", partidas_dia, headers=headers, params=querystring)
-	print(response.text)
-	return response
+def retorna_rodada_atual_campeonato_brasileiro():
+    url_api  = f'{url}/campeonatos/10/rodadas/25'
+    response = requests.request("GET", url_api, headers=headers)
+    status   = requests.get(url_api, headers=headers)
+    print(f'---------------------- status: {status} ----------------------')
+    print(response.json())
+    return response
 
-partidas_do_dia()
+# DADOS DAS PARTIDAS
+def retorna_partidas():
+    url_api  = f'{url}/campeonatos/10/partidas'
+    response = requests.request("GET", url_api, headers=headers)
+    status   = requests.get(url_api, headers=headers)
+    print(f'---------------------- status: {status} ----------------------')
+    print(response.json())
+    return response.json()
+
+def retorna_jogos_ao_vivo():
+    url_api  = f'{url}/ao-vivo'
+    response = requests.request("GET", url_api, headers=headers)
+    status   = requests.get(url_api, headers=headers)
+    print(f'---------------------- status: {status} ----------------------')
+    print(response.json())
+    return response.json()

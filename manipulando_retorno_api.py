@@ -1,6 +1,6 @@
 import re
 import pandas as pd
-from api_2 import *
+from api import *
 
 # Transformando Json em DataFrame
 df_jogos_aovivo = pd.DataFrame(retorna_jogos_ao_vivo())
@@ -21,8 +21,7 @@ for index, column in df_jogos_aovivo.iterrows():
     df_jogos_aovivo.loc[index, "time_visitante"] = str(time_2)
     # estadio
     nm_estadio = column["estadio"]
-    estadio = re.search(r"(nome_popular': )(.*?})", str(nm_estadio)).group(2).replace("'","").replace("}","")
+    estadio    = re.search(r"(nome_popular': )(.*?})", str(nm_estadio)).group(2).replace("'","").replace("}","")
     df_jogos_aovivo.loc[index, "estadio"] = str(estadio)
-
 
 df_jogos_aovivo.to_csv(r"C:\Users\didico\Documents\arquivos\teste_dtf.csv", encoding='utf-8', index=False)
