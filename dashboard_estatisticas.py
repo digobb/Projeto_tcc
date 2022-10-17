@@ -5,11 +5,12 @@ from turtle import position
 from PIL import Image
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+#from menu_jogos import retorna_link_partida
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-dados = pd.read_csv(r'C:/Users/didico/Documents/arquivos/teste_dtf.csv')
+dados = pd.read_csv(r'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/teste_dtf.csv')
 
 def grafico_partida():
     
@@ -63,7 +64,7 @@ def grafico_partida():
 
     #------------------------------------------------------------------------------------------------------
     # Cartoes
-    frame_cartoes = Frame(frame_quadros, width=200, height=90,bg=co1, relief="flat",)
+    frame_cartoes = Frame(frame_quadros, width=200, height=160,bg=co1, relief="flat",)
     frame_cartoes.place(x=210, y=0)
 
     app_pr = Label(frame_cartoes, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
@@ -72,11 +73,29 @@ def grafico_partida():
     app_nome_rev = Label(frame_cartoes, text="CARTOES", height=1,pady=0, padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
     app_nome_rev.place(x=20, y=5)
 
+    # time mandante
     app_nome_va = Label(frame_cartoes, text=f"{dados.loc[0, 'time_mandante']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
     app_nome_va.place(x=20, y=35)
-
+    cart_amarelo_1 = Label(frame_cartoes, text=" ", height=1, width=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg="yellow")
+    cart_amarelo_1.place(x=30, y=60)
+    qtd_cartao_amr1 = Label(frame_cartoes, text=f"1", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    qtd_cartao_amr1.place(x=45, y=60)
+    cart_vermelho_1 = Label(frame_cartoes, text=" ", height=1, width=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg="red")
+    cart_vermelho_1.place(x=90, y=60)
+    qtd_cartao_verm1 = Label(frame_cartoes, text=f"0", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    qtd_cartao_verm1.place(x=105, y=60)
+    # time visitante
     app_nome_va = Label(frame_cartoes, text=f"{dados.loc[0, 'time_visitante']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
-    app_nome_va.place(x=20, y=60)
+    app_nome_va.place(x=20, y=90)
+    cart_amarelo_2 = Label(frame_cartoes, text=" ", height=1, width=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg="yellow")
+    cart_amarelo_2.place(x=30, y=115)
+    qtd_cartao_amr_2 = Label(frame_cartoes, text=f"3", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    qtd_cartao_amr_2.place(x=45, y=115)
+    cart_vermelho_2 = Label(frame_cartoes, text=" ", height=1, width=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg="red")
+    cart_vermelho_2.place(x=90, y=115)
+    qtd_cartao_verm_2 = Label(frame_cartoes, text=f"0", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    qtd_cartao_verm_2.place(x=105, y=115)
+
 
     app_nome_p = Label(frame_cartoes)
 
@@ -84,7 +103,7 @@ def grafico_partida():
 
     # Placar
     frame_placar = Frame(frame_quadros, width=410, height=100,bg=co1, relief="flat",)
-    frame_placar.place(x=0, y=100)
+    frame_placar.place(x=0, y=200)
 
     app_pr = Label(frame_placar, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
     app_pr.place(x=0, y=0)
@@ -125,7 +144,7 @@ def grafico_partida():
         ax.text(i.get_x()-.03, i.get_height()+.5,'('+str(vlr_posses_bola[c])+')', fontsize=12, fontstyle='italic',  verticalalignment='baseline', color='dimgrey')
         c += 1
 
-    # Personalizando o gráfico
+    # Sets Graph
     ax.patch.set_facecolor('#FFFFFF')
     ax.spines['bottom'].set_color('#CCCCCC')
     ax.spines['bottom'].set_linewidth(1)
@@ -239,3 +258,5 @@ def grafico_partida():
     canva_vendedor.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
 
     janela.mainloop()
+
+grafico_partida()
