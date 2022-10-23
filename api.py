@@ -1,4 +1,5 @@
 import requests
+import pandas as pd
 from requests.structures import CaseInsensitiveDict
 
 url                      = "https://api.api-futebol.com.br/v1"
@@ -64,14 +65,18 @@ def retorna_jogos_ao_vivo():
     print(response.json())
     return response.json()
 
-def retorna_dados_partida():
-    url_api  = f'{url}/partidas/663'
+def retorna_dados_partida(id_partida):
+    print(id_partida)
+    url_api  = f'{url}/partidas/{id_partida}'
     response = requests.request("GET", url_api, headers=headers)
     status   = requests.get(url_api, headers=headers)
     print(f'---------------------- status: {status} ----------------------')
     print(response.json())
     return response.json()
 
-retorna_dados_partida()
+retorna_dados_partida(id_partida="320")
+
+
+
 
 

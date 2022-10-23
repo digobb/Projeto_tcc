@@ -5,13 +5,21 @@ from turtle import position
 from PIL import Image
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-#from menu_jogos import retorna_link_partida
+from menu_jogos import *
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 dados = pd.read_csv(r'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/teste_dtf.csv')
-
+if os.path.exists(r'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida.csv'):
+    print('arquivo com dados da partida encontrados')
+else:
+    dados_partida_id(id)
+    dados = retorna_dados_partida(id_partida=id)
+    df_dados_partida = pd.json_normalize(dados)
+    df_dados_partida.to_csv(r"C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida.csv", encoding='utf-8')
+    
 def grafico_partida():
     
     ################# cores ###############
@@ -39,7 +47,7 @@ def grafico_partida():
     frame_quadros.grid(row=1, column=0, sticky=NW)
 
     ################# Criando label para o frame_app_nome #############
-    app_nome = Label(frame_app_nome, text=f"{dados.loc[0, 'time_mandante']} X {dados.loc[0,'time_visitante']}", width=30, height=2,pady=1, padx=0, relief="flat", anchor=N, font=('Ivy 14 bold'), bg=co1, fg=co4)
+    app_nome = Label(frame_app_nome, text=f"{dados_partida.loc[0, 'time_visitante.nome_popular']} X {dados.loc[0,'time_visitante']}", width=30, height=2,pady=1, padx=0, relief="flat", anchor=N, font=('Ivy 14 bold'), bg=co1, fg=co4)
     app_nome.place(x=500, y=5)
 
     #------------------------------------------------------------------------------------------------------
@@ -95,7 +103,6 @@ def grafico_partida():
     cart_vermelho_2.place(x=90, y=115)
     qtd_cartao_verm_2 = Label(frame_cartoes, text=f"0", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
     qtd_cartao_verm_2.place(x=105, y=115)
-
 
     app_nome_p = Label(frame_cartoes)
 
@@ -259,4 +266,3 @@ def grafico_partida():
 
     janela.mainloop()
 
-grafico_partida()

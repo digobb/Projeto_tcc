@@ -1,9 +1,10 @@
 import re
 import pandas as pd
 from api import *
+from menu_jogos import *
 
 # Transformando Json em DataFrame
-df_jogos_aovivo = pd.DataFrame(retorna_jogos_ao_vivo())
+df_jogos_aovivo   = pd.DataFrame(retorna_jogos_ao_vivo())
 
 # Percorrendo DataFrame e ajustando retorno/formato dos dados
 for index, column in df_jogos_aovivo.iterrows():
