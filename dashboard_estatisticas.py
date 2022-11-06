@@ -1,3 +1,4 @@
+from asyncore import read
 from distutils.cmd import Command
 from tkinter import *
 from tkinter import ttk
@@ -5,29 +6,30 @@ from turtle import position
 from PIL import Image
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-from menu_jogos import *
+#from menu_jogos import *
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import re
 
-dados = pd.read_csv(r'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/teste_dtf.csv')
-if os.path.exists(r'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida.csv'):
-    print('arquivo com dados da partida encontrados')
-else:
-    dados_partida_id(id)
-    dados = retorna_dados_partida(id_partida=id)
-    df_dados_partida = pd.json_normalize(dados)
-    df_dados_partida.to_csv(r"C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida.csv", encoding='utf-8')
+#dados = pd.read_csv(r'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/teste_dtf.csv')
     
-def grafico_partida():
+def grafico_partida(id_partida):
+
+    # VERIFICA SE ARQUIVO CONTENDO OS DADOS DA PARTIDA EXISTEM.
+    if os.path.exists(f'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv'):
+        print('Arquivo com dados da partida encontrados!')
+        dados = pd.read_csv(f'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv')
+    else:
+        print('Nao foi encontrado arquivo com dados da partida')
     
     ################# cores ###############
     co0 = "#f0f3f5"  # Preta
     co1 = "#feffff"  # branca
     co2 = "#6f9fbd"  # azul
     co3 = "#38576b"  # valor
-    co4 = "#403d3d"   # para letra
+    co4 = "#403d3d"  # para letra
     co5 = "#e06636"   
     co6 = "#6dd695" 
 
@@ -43,32 +45,26 @@ def grafico_partida():
     frame_app_nome.grid(row=0, column=0)
 
     #Aqui iremos mostrar as estatisticas
-    frame_quadros = Frame(janela, width=1370, height=700,bg=co0, pady=15, padx=7, relief="flat",)
+    frame_quadros = Frame(janela, width=1370, height=1000,bg=co0, pady=15, padx=7, relief="flat",)
     frame_quadros.grid(row=1, column=0, sticky=NW)
 
     ################# Criando label para o frame_app_nome #############
-    app_nome = Label(frame_app_nome, text=f"{dados_partida.loc[0, 'time_visitante.nome_popular']} X {dados.loc[0,'time_visitante']}", width=30, height=2,pady=1, padx=0, relief="flat", anchor=N, font=('Ivy 14 bold'), bg=co1, fg=co4)
+    app_nome = Label(frame_app_nome, text=f"{dados.loc[0, 'time_mandante.nome_popular']} {dados.loc[0, 'placar_mandante']} X {dados.loc[0, 'placar_visitante']} {dados.loc[0,'time_visitante.nome_popular']}", width=30, height=2,pady=1, padx=0, relief="flat", anchor=N, font=('Ivy 14 bold'), bg=co1, fg=co4)
     app_nome.place(x=500, y=5)
 
     #------------------------------------------------------------------------------------------------------
-    # Estadio - data
-    frame_estadio = Frame(frame_quadros, width=200, height=90,bg=co1, relief="flat",)
-    frame_estadio.place(x=0, y=0)
+    # CAMPEONATO
+    frame_campeonato = Frame(frame_quadros, width=200, height=90,bg=co1, relief="flat")
+    frame_campeonato.place(x=0, y=0)
 
-    app_pr = Label(frame_estadio, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
-    app_pr.place(x=0, y=0)
+    app_nome_camp = Label(frame_campeonato, text="CAMPEONATO", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_camp.place(x=20, y=5)
 
-    app_nome_rev = Label(frame_estadio, text="ESTADIO", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
-    app_nome_rev.place(x=20, y=5)
+    app_camp = Label(frame_campeonato, text=f"{dados.loc[0, 'campeonato.nome_popular']}", height=1, pady=0, padx=0,relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
+    app_camp.place(x=40, y=35)
 
-    app_nome_va = Label(frame_estadio, text=f"{dados.loc[0, 'estadio']}", height=1, pady=0, padx=0,relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
-    app_nome_va.place(x=40, y=35)
-
-    app_nome_p = Label(frame_estadio, text=f"{dados.loc[0, 'data_realizacao']} |", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 8 bold'), bg=co1, fg=co6)
-    app_nome_p.place(x=60, y=70)
-
-    app_nome_p = Label(frame_estadio, text=f"{dados.loc[0, 'hora_realizacao']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 8 bold'), bg=co1, fg=co6)
-    app_nome_p.place(x=120, y=70)
+    app_nome_rodada = Label(frame_campeonato, text=f"{dados.loc[0, 'rodada']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 8 bold'), bg=co1, fg=co6)
+    app_nome_rodada.place(x=60, y=70)
 
     #------------------------------------------------------------------------------------------------------
     # Cartoes
@@ -82,7 +78,7 @@ def grafico_partida():
     app_nome_rev.place(x=20, y=5)
 
     # time mandante
-    app_nome_va = Label(frame_cartoes, text=f"{dados.loc[0, 'time_mandante']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    app_nome_va = Label(frame_cartoes, text=f"{dados.loc[0, 'time_mandante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
     app_nome_va.place(x=20, y=35)
     cart_amarelo_1 = Label(frame_cartoes, text=" ", height=1, width=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg="yellow")
     cart_amarelo_1.place(x=30, y=60)
@@ -93,7 +89,7 @@ def grafico_partida():
     qtd_cartao_verm1 = Label(frame_cartoes, text=f"0", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
     qtd_cartao_verm1.place(x=105, y=60)
     # time visitante
-    app_nome_va = Label(frame_cartoes, text=f"{dados.loc[0, 'time_visitante']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    app_nome_va = Label(frame_cartoes, text=f"{dados.loc[0, 'time_visitante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
     app_nome_va.place(x=20, y=90)
     cart_amarelo_2 = Label(frame_cartoes, text=" ", height=1, width=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg="yellow")
     cart_amarelo_2.place(x=30, y=115)
@@ -107,20 +103,45 @@ def grafico_partida():
     app_nome_p = Label(frame_cartoes)
 
     # ------------------------------------------------------------------------------------------------------
+    # Escalacao
+    ## AJUSTAR REGEX PARA QUE CAPTURE POR COMPLETO DA SIGLAS DAS POSICOES E NUMERO
+    frame_escalacao = Frame(frame_quadros, width=410, height=600,bg=co1, relief="flat",)
+    frame_escalacao.place(x=0, y=185)
 
-    # Placar
-    frame_placar = Frame(frame_quadros, width=410, height=100,bg=co1, relief="flat",)
-    frame_placar.place(x=0, y=200)
-
-    app_pr = Label(frame_placar, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_pr = Label(frame_escalacao, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
     app_pr.place(x=0, y=0)
 
-    app_nome_rev = Label(frame_placar, text="PLACAR", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_rev = Label(frame_escalacao, text="ESCALACAO", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
     app_nome_rev.place(x=20, y=5)
 
-    app_nome_va = Label(frame_placar, text=f"{dados.loc[0, 'placar_mandante']} x {dados.loc[0, 'placar_visitante']}", height=1, pady=0, padx=0,relief="flat", anchor=CENTER, font=('Ivy 30 bold'), bg=co1, fg=co3)
-    app_nome_va.place(x=150, y=35)
+    # Cria a lista do regex encontrado e apos adiciona a lista de titulares time 1
+    lista_titulares_1 = []
+    jogadores_titulares_1 = re.findall(r"(nome_popular': )(.*?,)", dados.loc[0, 'escalacoes.mandante.titulares'])
+    for tit_1 in jogadores_titulares_1:
+        lista_titulares_1.append(tit_1)
 
+     # Cria a lista do regex encontrado e apos adiciona a lista de titulares time 2
+    lista_titulares_2 = []
+    jogadores_titulares_2 = re.findall(r"(nome_popular': )(.*?,)", dados.loc[0, 'escalacoes.visitante.titulares'])
+    for tit_2 in jogadores_titulares_2:
+        lista_titulares_1.append(tit_2)
+    
+    # Controla a lista de escalacao / posicao no Frame
+    pos_x = 0
+    pos_y = 3
+    for titulares_1 in lista_titulares_1:
+        app_nome_tit1 = Label(frame_escalacao, text=f'{titulares_1}', height=1, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
+        app_nome_tit1.grid(padx=pos_x, pady=pos_y)
+        pos_x =+ 2
+
+    # Controla a lista de escalacao / posicao no Frame
+    pos_x = 0
+    pos_y = 3
+    for titulares_2 in lista_titulares_2:
+        app_nome_tit2 = Label(frame_escalacao, text=f'{titulares_2}', height=1, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
+        app_nome_tit2.grid(padx=pos_x, pady=pos_y)
+        pos_x =+ 2
+        
 
     # ------------------------------------------------------------------------------------------------------
     # Posse de bola
@@ -133,7 +154,7 @@ def grafico_partida():
     vlr_posses_bola = [5, 10]
 
     # Nomes dos times para plotagem
-    times = [f"{dados.loc[0,'time_mandante']}", f"{dados.loc[0, 'time_visitante']}"]
+    times = [f"{dados.loc[0,'time_mandante.nome_popular']}", f"{dados.loc[0, 'time_visitante.nome_popular']}"]
 
     # faça figura e atribua objetos de eixo
     figura = plt.Figure(figsize=(11.4, 2.5), dpi=80)
@@ -148,7 +169,7 @@ def grafico_partida():
     # set individual bar lables using above list
     for i in ax.patches:
         # get_x pulls left or right; get_height pushes up or down
-        ax.text(i.get_x()-.03, i.get_height()+.5,'('+str(vlr_posses_bola[c])+')', fontsize=12, fontstyle='italic',  verticalalignment='baseline', color='dimgrey')
+        ax.text(i.get_x()-.03, i.get_height()+.5,str(vlr_posses_bola[c]), fontsize=12, fontstyle='italic',  verticalalignment='baseline', color='dimgrey')
         c += 1
 
     # Sets Graph
