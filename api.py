@@ -74,7 +74,7 @@ def retorna_dados_partida(id_partida):
     print(response.json())
     return response.json()
 
-retorna_dados_partida(id_partida="320")
+#retorna_dados_partida(id_partida="320")
 
 
 
