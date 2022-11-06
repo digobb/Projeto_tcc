@@ -6,7 +6,7 @@ from turtle import position
 from PIL import Image
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-#from dashboard_estatisticas import grafico_partida as gp
+from dashboard_estatisticas import grafico_partida as gp
 from api import *
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -19,6 +19,7 @@ def dados_partida_id(id):
     dados = retorna_dados_partida(id_partida=id)
     df_dados_partida = pd.json_normalize(dados)
     df_dados_partida.to_csv(f"C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id}.csv", encoding='utf-8')
+    gp(id_partida=id)
     return True
 
 # Menu
