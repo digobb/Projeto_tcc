@@ -6,12 +6,12 @@ from turtle import position
 from PIL import Image
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
-#from menu_jogos import *
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 import re
+import json
 
 #dados = pd.read_csv(r'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/teste_dtf.csv')
     
@@ -57,6 +57,9 @@ def grafico_partida(id_partida):
     frame_campeonato = Frame(frame_quadros, width=200, height=90,bg=co1, relief="flat")
     frame_campeonato.place(x=0, y=0)
 
+    app_camp = Label(frame_campeonato, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_camp.place(x=0, y=0)
+
     app_nome_camp = Label(frame_campeonato, text="CAMPEONATO", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
     app_nome_camp.place(x=20, y=5)
 
@@ -68,7 +71,7 @@ def grafico_partida(id_partida):
 
     #------------------------------------------------------------------------------------------------------
     # Cartoes
-    frame_cartoes = Frame(frame_quadros, width=200, height=160,bg=co1, relief="flat",)
+    frame_cartoes = Frame(frame_quadros, width=200, height=160,bg=co1, relief="flat")
     frame_cartoes.place(x=210, y=0)
 
     app_pr = Label(frame_cartoes, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
@@ -104,44 +107,69 @@ def grafico_partida(id_partida):
 
     # ------------------------------------------------------------------------------------------------------
     # Escalacao
-    ## AJUSTAR REGEX PARA QUE CAPTURE POR COMPLETO DA SIGLAS DAS POSICOES E NUMERO
-    frame_escalacao = Frame(frame_quadros, width=410, height=600,bg=co1, relief="flat",)
-    frame_escalacao.place(x=0, y=185)
+    # TIME MANDANTE
+    esc_mand_tit_json = str(dados.loc[0, 'escalacoes.mandante.titulares']).replace('\'', '"')
+    esc_mand_tit      = json.loads(esc_mand_tit_json)
 
-    app_pr = Label(frame_escalacao, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
-    app_pr.place(x=0, y=0)
+    frame_escalacao = Frame(frame_quadros, width=410, height=400,bg=co1, relief="flat")
+    frame_escalacao.place(x=0, y=175)
 
-    app_nome_rev = Label(frame_escalacao, text="ESCALACAO", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
-    app_nome_rev.place(x=20, y=5)
+    app_esc = Label(frame_escalacao, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_esc.place(x=0, y=0)
 
-    # Cria a lista do regex encontrado e apos adiciona a lista de titulares time 1
-    lista_titulares_1 = []
-    jogadores_titulares_1 = re.findall(r"(nome_popular': )(.*?,)", dados.loc[0, 'escalacoes.mandante.titulares'])
-    for tit_1 in jogadores_titulares_1:
-        lista_titulares_1.append(tit_1)
+    app_nome_esc = Label(frame_escalacao, text="ESCALAÇÕES", height=1,pady=0, padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_esc.place(x=20, y=5)
 
-     # Cria a lista do regex encontrado e apos adiciona a lista de titulares time 2
-    lista_titulares_2 = []
-    jogadores_titulares_2 = re.findall(r"(nome_popular': )(.*?,)", dados.loc[0, 'escalacoes.visitante.titulares'])
-    for tit_2 in jogadores_titulares_2:
-        lista_titulares_1.append(tit_2)
-    
-    # Controla a lista de escalacao / posicao no Frame
-    pos_x = 0
-    pos_y = 3
-    for titulares_1 in lista_titulares_1:
-        app_nome_tit1 = Label(frame_escalacao, text=f'{titulares_1}', height=1, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
-        app_nome_tit1.grid(padx=pos_x, pady=pos_y)
-        pos_x =+ 2
+    y = int(50)
+    for jogador in range(11):
+        # Numero camisa titular mandate
+        cam_tit          = esc_mand_tit[jogador]['camisa']
+        cam_tit_mandante = Label(frame_escalacao, text=f"{cam_tit}", height=1,pady=1, padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+        # Nome jogador titular mandante
+        nm_tit           = esc_mand_tit[jogador]['atleta']['nome_popular']
+        nm_tit_mandate   = Label(frame_escalacao, text=f"{nm_tit}", height=1,pady=1, padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+        # Sigla posicao dos jogadores titulares time mandante.
+        sg_tit          = esc_mand_tit[jogador]['posicao']['sigla']
+        sg_tit_mandante = Label(frame_escalacao, text=f"{sg_tit}", height=1,pady=1, padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
 
-    # Controla a lista de escalacao / posicao no Frame
-    pos_x = 0
-    pos_y = 3
-    for titulares_2 in lista_titulares_2:
-        app_nome_tit2 = Label(frame_escalacao, text=f'{titulares_2}', height=1, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
-        app_nome_tit2.grid(padx=pos_x, pady=pos_y)
-        pos_x =+ 2
+        y = y + 25
+        if cam_tit_mandante:
+            cam_tit_mandante.place(x=5, y=y)
+        if nm_tit_mandate:
+            nm_tit_mandate.place(x=25, y=y)
+        if sg_tit_mandante:
+            sg_tit_mandante.place(x=155, y=y)
         
+    # TIME VISITANTE
+    esc_mand_vis_json = str(dados.loc[0, 'escalacoes.visitante.titulares']).replace('\'', '"')
+    esc_vis_tit       = json.loads(esc_mand_vis_json)
+
+    y = int(50)
+    for jogador_vis in range(11):
+        # Numero camisa titular visitante
+        cam_vis           = esc_vis_tit[jogador_vis]['camisa']
+        cam_tit_visitante = Label(frame_escalacao, text=f"{cam_vis}", height=1,pady=1, padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+        # Nome jogador titular visitante
+        nm_vis           = esc_vis_tit[jogador_vis]['atleta']['nome_popular']
+        nm_tit_visitante = Label(frame_escalacao, text=f"{nm_vis}", height=1,pady=1, padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+        # Sigla posicao dos jogadores visitante
+        sg_vis           = esc_vis_tit[jogador_vis]['posicao']['sigla']
+        sg_tit_visitante = Label(frame_escalacao, text=f"{sg_vis}", height=1,pady=1, padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+
+        y = y + 25
+        if cam_tit_visitante:
+            cam_tit_visitante.place(x=380, y=y)
+        if nm_tit_visitante:
+            nm_tit_visitante.place(x=270, y=y)
+        if sg_tit_visitante:
+            sg_tit_visitante.place(x=230, y=y)
+
+        
+    
+
+
+
+
 
     # ------------------------------------------------------------------------------------------------------
     # Posse de bola
