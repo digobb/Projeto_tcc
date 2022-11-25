@@ -8,11 +8,13 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from dashboard_estatisticas import grafico_partida as gp
 from api import *
+from manipulando_retorno_api import chama_retorno_jogos_aovivo
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import os, time
 
-dados = pd.read_csv(r'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/teste_dtf.csv')
+#dados = pd.read_csv(r'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/teste_dtf.csv')
 
 def dados_partida_id(id):
     print(id)
@@ -28,6 +30,15 @@ def tela_principal():
     tela.title('Jogos ao vivo do campeonato')
     frame_janela = Frame(tela, width=300, height=250)
     frame_janela.grid(padx=2, pady=2)
+    if os.path.exists(f'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/jogos_aovivo.csv'):
+        print('Arquivo com dados da partida encontrados!')
+        dados = pd.read_csv(f'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/jogos_aovivo.csv')
+    else:
+        print('Nao foi encontrado arquivo com os jogos ao vivo... criando...')
+        chama_retorno_jogos_aovivo()
+        time.sleep(2)
+        dados = pd.read_csv(f'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/jogos_aovivo.csv')
+        
     for index, column in dados.iterrows():
         id_partida = column['_link']
         dados.loc[0, '_link'] = Button(tela, text=f'{column["time_mandante"]} x {column["time_visitante"]}', font=('', 12), bg='black', fg='white')
