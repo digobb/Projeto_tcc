@@ -164,65 +164,30 @@ def grafico_partida(id_partida):
         if sg_tit_visitante:
             sg_tit_visitante.place(x=230, y=y)
 
-        
-    
-
-
-
-
-
     # ------------------------------------------------------------------------------------------------------
     # Posse de bola
-
     frame_possebola = Frame(frame_quadros, width=500, height=200, bg=co1, relief="flat",)
     frame_possebola.place(x=420, y=0)
 
-    # dados para valores de posse de bola
-    #vlr_posses_bola = [f"{dados.loc[0, 'posse_bolatime1']}", f"{dados.loc[0, 'posse_bolatime2']}"]
-    vlr_posses_bola = [5, 10]
+    posse_bola_mandante  = str(dados.loc[0, 'estatisticas.mandante.posse_de_bola']).replace('%','')
+    posse_bola_visitante = str(dados.loc[0, 'estatisticas.visitante.posse_de_bola']).replace('%','')
 
-    # Nomes dos times para plotagem
-    times = [f"{dados.loc[0,'time_mandante.nome_popular']}", f"{dados.loc[0, 'time_visitante.nome_popular']}"]
-
-    # faça figura e atribua objetos de eixo
-    figura = plt.Figure(figsize=(11.4, 2.5), dpi=80)
-    ax = figura.add_subplot(111)
-
-
-    ax.bar(times, vlr_posses_bola,  color="#82b1ff")
-    # create a list to collect the plt.patches data
-    totals = []
-
-    c = 0
-    # set individual bar lables using above list
-    for i in ax.patches:
-        # get_x pulls left or right; get_height pushes up or down
-        ax.text(i.get_x()-.03, i.get_height()+.5,str(vlr_posses_bola[c]), fontsize=12, fontstyle='italic',  verticalalignment='baseline', color='dimgrey')
-        c += 1
-
-    # Sets Graph
-    ax.patch.set_facecolor('#FFFFFF')
-    ax.spines['bottom'].set_color('#CCCCCC')
-    ax.spines['bottom'].set_linewidth(1)
-    ax.spines['right'].set_linewidth(0)
-    ax.spines['top'].set_linewidth(0)
-    ax.spines['left'].set_color('#CCCCCC')
-    ax.spines['left'].set_linewidth(1)
-
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
-    ax.spines['left'].set_visible(False)
-    ax.tick_params(bottom=False, left=False)
-    ax.set_axisbelow(True)
-    ax.yaxis.grid(True, color='#EEEEEE')
-    ax.xaxis.grid(False)
+    times           = [f"{dados.loc[0,'time_mandante.nome_popular']}", f"{dados.loc[0, 'time_visitante.nome_popular']}"]
+    vlr_posses_bola = [int(posse_bola_mandante), int(posse_bola_visitante)]
+    
+    figura = plt.Figure(figsize=(10, 2), dpi=80)
+    canva  = FigureCanvasTkAgg(figura, frame_possebola)
+    canva.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
+    
+    ax = figura.add_subplot()
+    ax.barh(times, vlr_posses_bola)
 
     app_pr = Label(frame_possebola, text="", width=1, height=10, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
     app_pr.place(x=0, y=0)
     app_nome_rev = Label(frame_possebola, text="POSSE DE BOLA", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
     app_nome_rev.grid(row=0, column=0, padx=20, pady=0, sticky=NSEW)
-    canva = FigureCanvasTkAgg(figura, frame_possebola)
-    canva.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
+    
+    
 
     # ------------------------------------------------------------------------------------------------------
     # EXEMPLO GRAF PIZZA
