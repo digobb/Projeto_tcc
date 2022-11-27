@@ -3,7 +3,7 @@ from distutils.cmd import Command
 from tkinter import *
 from tkinter import ttk
 from turtle import position
-from PIL import Image
+from PIL import Image, ImageTk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import pandas as pd
@@ -77,30 +77,34 @@ def grafico_partida(id_partida):
     app_pr = Label(frame_cartoes, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
     app_pr.place(x=0, y=0)
 
-    app_nome_rev = Label(frame_cartoes, text="CARTOES", height=1,pady=0, padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_rev = Label(frame_cartoes, text="CARTÕES", height=1,pady=0, padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
     app_nome_rev.place(x=20, y=5)
 
+    cart_amarelo_mandante   = str(dados.loc[0, 'cartoes.amarelo.mandante'])
+    cart_vermelho_mandante  = str(dados.loc[0, 'cartoes.vermelho.mandante'])
+    cart_amarelo_visitante  = str(dados.loc[0, 'cartoes.amarelo.visitante'])
+    cart_vermelho_visitante = str(dados.loc[0, 'cartoes.vermelho.visitante'])
     # time mandante
     app_nome_va = Label(frame_cartoes, text=f"{dados.loc[0, 'time_mandante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
     app_nome_va.place(x=20, y=35)
     cart_amarelo_1 = Label(frame_cartoes, text=" ", height=1, width=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg="yellow")
     cart_amarelo_1.place(x=30, y=60)
-    qtd_cartao_amr1 = Label(frame_cartoes, text=f"1", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    qtd_cartao_amr1 = Label(frame_cartoes, text=f"{cart_amarelo_mandante.count('cartao_id')}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
     qtd_cartao_amr1.place(x=45, y=60)
     cart_vermelho_1 = Label(frame_cartoes, text=" ", height=1, width=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg="red")
     cart_vermelho_1.place(x=90, y=60)
-    qtd_cartao_verm1 = Label(frame_cartoes, text=f"0", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    qtd_cartao_verm1 = Label(frame_cartoes, text=f"{cart_vermelho_mandante.count('cartao_id')}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
     qtd_cartao_verm1.place(x=105, y=60)
     # time visitante
     app_nome_va = Label(frame_cartoes, text=f"{dados.loc[0, 'time_visitante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
     app_nome_va.place(x=20, y=90)
     cart_amarelo_2 = Label(frame_cartoes, text=" ", height=1, width=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg="yellow")
     cart_amarelo_2.place(x=30, y=115)
-    qtd_cartao_amr_2 = Label(frame_cartoes, text=f"3", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    qtd_cartao_amr_2 = Label(frame_cartoes, text=f"{cart_amarelo_visitante.count('cartao_id')}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
     qtd_cartao_amr_2.place(x=45, y=115)
     cart_vermelho_2 = Label(frame_cartoes, text=" ", height=1, width=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg="red")
     cart_vermelho_2.place(x=90, y=115)
-    qtd_cartao_verm_2 = Label(frame_cartoes, text=f"0", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    qtd_cartao_verm_2 = Label(frame_cartoes, text=f"{cart_vermelho_visitante.count('cartao_id')}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
     qtd_cartao_verm_2.place(x=105, y=115)
 
     app_nome_p = Label(frame_cartoes)
@@ -166,7 +170,7 @@ def grafico_partida(id_partida):
 
     # ------------------------------------------------------------------------------------------------------
     # Posse de bola
-    frame_possebola = Frame(frame_quadros, width=500, height=200, bg=co1, relief="flat",)
+    frame_possebola = Frame(frame_quadros, width=500, height=200, bg=co1, relief="flat")
     frame_possebola.place(x=420, y=0)
 
     posse_bola_mandante  = str(dados.loc[0, 'estatisticas.mandante.posse_de_bola']).replace('%','')
@@ -175,20 +179,19 @@ def grafico_partida(id_partida):
     times           = [f"{dados.loc[0,'time_mandante.nome_popular']}", f"{dados.loc[0, 'time_visitante.nome_popular']}"]
     vlr_posses_bola = [int(posse_bola_mandante), int(posse_bola_visitante)]
     
-    figura = plt.Figure(figsize=(10, 2), dpi=80)
+    figura = plt.Figure(figsize=(11, 2), dpi=93)
     canva  = FigureCanvasTkAgg(figura, frame_possebola)
     canva.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
     
     ax = figura.add_subplot()
-    ax.barh(times, vlr_posses_bola)
+    a = ax.barh(times, vlr_posses_bola)
+    ax.bar_label(a, fmt='%1.1f%%')
 
     app_pr = Label(frame_possebola, text="", width=1, height=10, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
     app_pr.place(x=0, y=0)
     app_nome_rev = Label(frame_possebola, text="POSSE DE BOLA", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
     app_nome_rev.grid(row=0, column=0, padx=20, pady=0, sticky=NSEW)
     
-    
-
     # ------------------------------------------------------------------------------------------------------
     # EXEMPLO GRAF PIZZA
     # Faturamento por Categoria 
@@ -277,6 +280,61 @@ def grafico_partida(id_partida):
     app_categoria_vendedor.grid(row=0, column=0, pady=0, padx=20, columnspan=2, sticky=NSEW)
     canva_vendedor = FigureCanvasTkAgg(figura, frame_vendedor)
     canva_vendedor.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
+
+    # ------------------------------------------------------------------------------------------------------
+    # Escanteios
+    frame_escanteio = Frame(frame_quadros, width=200,height=180, bg=co1, relief="flat",)
+    frame_escanteio.place(x=420, y=580)
+
+    app_esc = Label(frame_escanteio, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_esc.place(x=0, y=0)
+
+    app_nome_esc = Label(frame_escanteio, text="ESCANTEIOS", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_esc.place(x=20, y=5)
+
+    app_tim1_esc = Label(frame_escanteio, text=f"{dados.loc[0, 'time_mandante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    app_tim1_esc.place(x=20, y=35)
+
+    app_tim2_esc = Label(frame_escanteio, text=f"{dados.loc[0, 'time_visitante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    app_tim2_esc.place(x=20, y=90)
+
+    # ------------------------------------------------------------------------------------------------------
+    # OUTRO FRAME
+
+    frame_ex1 = Frame(frame_quadros, width=200,height=180, bg=co1, relief="flat",)
+    frame_ex1.place(x=630, y=580)
+
+    app_ex1 = Label(frame_ex1, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_ex1.place(x=0, y=0)
+
+    app_nome_ex1 = Label(frame_ex1, text="FRAME 1", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_ex1.place(x=20, y=5)
+
+    # ------------------------------------------------------------------------------------------------------
+    # OUTRO FRAME
+
+    frame_ex2 = Frame(frame_quadros, width=200,height=180, bg=co1, relief="flat",)
+    frame_ex2.place(x=840, y=580)
+
+    app_ex2 = Label(frame_ex2, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_ex2.place(x=0, y=0)
+
+    app_nome_ex2 = Label(frame_ex2, text="FRAME 2", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_ex2.place(x=20, y=5)
+
+    # ------------------------------------------------------------------------------------------------------
+    # OUTRO FRAME
+
+    frame_ex3 = Frame(frame_quadros, width=200,height=180, bg=co1, relief="flat",)
+    frame_ex3.place(x=1050, y=580)
+
+    app_ex3 = Label(frame_ex3, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_ex3.place(x=0, y=0)
+
+    app_nome_ex3 = Label(frame_ex3, text="FRAME 3", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_ex3.place(x=20, y=5)
+
+
 
     janela.mainloop()
 
