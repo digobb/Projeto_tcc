@@ -27,9 +27,12 @@ def dados_partida_id(id):
 # Menu
 def tela_principal():
     tela = Tk()
-    tela.title('Jogos ao vivo do campeonato')
-    frame_janela = Frame(tela, width=300, height=250)
-    frame_janela.grid(padx=2, pady=2)
+    tela['background']='white'
+    tela.iconbitmap('C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/img/icon.ico')
+    tela.title('Jogos ao vivo')
+    tela.geometry("400x400") 
+    tela.minsize(400, 400) 
+
     if os.path.exists(f'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/jogos_aovivo.csv'):
         print('Arquivo com dados da partida encontrados!')
         dados = pd.read_csv(f'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/jogos_aovivo.csv')
@@ -38,13 +41,14 @@ def tela_principal():
         chama_retorno_jogos_aovivo()
         time.sleep(2)
         dados = pd.read_csv(f'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/jogos_aovivo.csv')
-        
+    
+    pos_y = int(0)
     for index, column in dados.iterrows():
         id_partida = column['_link']
-        dados.loc[0, '_link'] = Button(tela, text=f'{column["time_mandante"]} x {column["time_visitante"]}', font=('', 12), bg='black', fg='white')
+        dados.loc[0, '_link'] = Button(tela, text=f'{column["time_mandante"]} x {column["time_visitante"]}', font=('', 12), bg='#305EE4', fg='white')
         dados.loc[0, '_link']['command'] = lambda id=id_partida: dados_partida_id(id)
-        dados.loc[0, '_link'].grid(column=0)
-
+        pos_y = pos_y + 35
+        dados.loc[0, '_link'].place(x=100, y=pos_y)
     tela.mainloop()
 
 tela_principal()
