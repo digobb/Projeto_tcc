@@ -36,8 +36,10 @@ def grafico_partida(id_partida):
     fundo = "#3F729B"
 
     janela = Tk()
+    janela.iconbitmap('C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/img/icon.ico')
+    janela['background']='white'
     #janela.state('zoomed')
-    janela.title('')
+    janela.title(f'Estatisticas: {dados.loc[0, "time_mandante.nome_popular"]} x {dados.loc[0, "time_visitante.nome_popular"]}')
 
     ################# Frames ####################
     # Neste frame iremos Mostrar o nome do Aplicativo
@@ -107,8 +109,6 @@ def grafico_partida(id_partida):
     qtd_cartao_verm_2 = Label(frame_cartoes, text=f"{cart_vermelho_visitante.count('cartao_id')}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
     qtd_cartao_verm_2.place(x=105, y=115)
 
-    app_nome_p = Label(frame_cartoes)
-
     # ------------------------------------------------------------------------------------------------------
     # Escalacao
     # TIME MANDANTE
@@ -123,6 +123,12 @@ def grafico_partida(id_partida):
 
     app_nome_esc = Label(frame_escalacao, text="ESCALAÇÕES", height=1,pady=0, padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
     app_nome_esc.place(x=20, y=5)
+
+    sigla_time_mand = Label(frame_escalacao, text=f"{dados.loc[0, 'time_mandante.sigla']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 13 bold'), bg=co1, fg=co3)
+    sigla_time_mand.place(x=67, y=40)
+
+    sigla_time_vis = Label(frame_escalacao, text=f"{dados.loc[0, 'time_visitante.sigla']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 13 bold'), bg=co1, fg=co3)
+    sigla_time_vis.place(x=270, y=40)
 
     y = int(50)
     for jogador in range(11):
@@ -193,67 +199,72 @@ def grafico_partida(id_partida):
     app_nome_rev.grid(row=0, column=0, padx=20, pady=0, sticky=NSEW)
     
     # ------------------------------------------------------------------------------------------------------
-    # EXEMPLO GRAF PIZZA
-    # Faturamento por Categoria 
+    # POSSE DE BOLA
 
-    frame_categoria = Frame(frame_quadros, width=200,height=200, bg=co1, relief="flat",)
-    frame_categoria.place(x=420, y=230)
+    frame_poss_bola = Frame(frame_quadros, width=200,height=200, bg=co1, relief="flat",)
+    frame_poss_bola.place(x=420, y=230)
 
     # faça figura e atribua objetos de eixo
     figura = plt.Figure(figsize=(5.15, 4), dpi=80)
     ax = figura.add_subplot(111)
 
-    # Vendas 
-    categoria_total = [5701, 4275, 8385, 5934, 6934]
+    mand_posse_bola = str(dados.loc[0, 'estatisticas.mandante.posse_de_bola']).replace('%','')
+    visi_posse_bola = str(dados.loc[0, 'estatisticas.visitante.posse_de_bola']).replace('%','')
 
-    # Categorias
-    labels = ["Categoria - 1", "Categoria - 2 ", "Categoria - 3", "Categoria - 4", "Categoria - 5"]
+    # posse
+    posse_bola = [int(mand_posse_bola), int(visi_posse_bola)]
+
+    # times
+    times_posse_bola = [str(dados.loc[0, 'time_mandante.nome_popular']), str(dados.loc[0, 'time_visitante.nome_popular'])]
 
     # only "explode
-    explode = (0.1, 0.1, 0.1, 0.1, 0.1)
+    explode = (0.03, 0.03)
 
     # colors = ['#665191', '#a05195','#d45087',  "#f95d6a", "#ff7c43", "#ffa600"]
-    colors = ['#ff9999',  '#c5cae9', '#bbdefb', '#99ff99', '#ffcc99']
+    colors = ['#ff9999',  '#c5cae9']
 
 
-    ax.pie(categoria_total, explode=explode, wedgeprops=dict(width=0.64), labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=90)
+    ax.pie(posse_bola, explode=explode, wedgeprops=dict(width=0.64), labels=times_posse_bola, colors=colors, autopct='%1.1f%%', shadow=True, startangle=95)
 
-    app_cat = Label(frame_categoria, text="", width=1, height=10, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
-    app_cat.place(x=0, y=0)
-    app_categoria = Label(frame_categoria, text="Desempenho de categorias Top - 5", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
-    app_categoria.grid(row=0, column=0, pady=0, padx=20, columnspan=2, sticky=NSEW)
-    canva_categoria = FigureCanvasTkAgg(figura, frame_categoria)
-    canva_categoria.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
+    app_poss = Label(frame_poss_bola, text="", width=1, height=10, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_poss.place(x=0, y=0)
+    app_posse = Label(frame_poss_bola, text="POSSE DE BOLA", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_posse.grid(row=0, column=0, pady=0, padx=20, columnspan=2, sticky=NSEW)
+    canva_posse = FigureCanvasTkAgg(figura, frame_poss_bola)
+    canva_posse.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
 
 
     # ------------------------------------------------------------------------------------------------------
     # EXEMPLOS GRAF BAR
     # Faturamento por Vendedores 
 
-    frame_vendedor = Frame(frame_quadros, width=200, height=200,bg=co1, relief="flat",)
-    frame_vendedor.place(x=840, y=230)
+    frame_fin_precisao = Frame(frame_quadros, width=200, height=200,bg=co1, relief="flat",)
+    frame_fin_precisao.place(x=840, y=230)
 
     # faça figura e atribua objetos de eixo
     figura = plt.Figure(figsize=(7.3, 4.6), dpi=70)
     ax = figura.add_subplot(111)
 
-    # vendas
-    vlr_posses_bola = [2701, 4275, 6385, 8693, 3622]
+    mand_finalizacao_precisao = str(dados.loc[0, 'estatisticas.mandante.finalizacao.precisao']).replace('%','')
+    vis_finalizacao_precisao = str(dados.loc[0, 'estatisticas.visitante.finalizacao.precisao']).replace('%','')
 
-    # vendedores
-    vendedor = ["Vendedor - 1", "Vendedor - 2 ", "Vendedor - 3", "Vendedor - 4", "Vendedor - 5"]
+    # Finalizacoes
+    finalizacao_total = [int(mand_finalizacao_precisao), int(vis_finalizacao_precisao)]
 
-    ax.bar(vendedor, vlr_posses_bola,  color=colors)
+
+    # times
+    times_finzalicao = [str(dados.loc[0, 'time_mandante.nome_popular']), str(dados.loc[0, 'time_visitante.nome_popular'])]
+
+    ax.bar(times_finzalicao, finalizacao_total,  color=colors, width=0.8)
 
     # create a list to collect the plt.patches data
     totals = []
-
 
     c = 0
     # set individual bar lables using above list
     for i in ax.patches:
         # get_x pulls left or right; get_height pushes up or down
-        ax.text(i.get_x()-.03, i.get_height()+.5, str(vlr_posses_bola[c])+'$', fontsize=12, fontstyle='italic', color='dimgrey', weight='bold', verticalalignment='baseline',)
+        ax.text(i.get_x()-.03, i.get_height()+.05, str(finalizacao_total[c])+'%', fontsize=12, fontstyle='italic', color='dimgrey', weight='bold', verticalalignment='baseline',)
         c += 1
 
     ax.patch.set_facecolor('#FFFFFF')
@@ -274,12 +285,12 @@ def grafico_partida(id_partida):
     ax.xaxis.grid(False)
 
 
-    app_vend = Label(frame_vendedor, text="", width=1, height=10, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
-    app_vend.place(x=0, y=0)
-    app_categoria_vendedor = Label(frame_vendedor, text="Faturamento por Vendedor Top - 5", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
-    app_categoria_vendedor.grid(row=0, column=0, pady=0, padx=20, columnspan=2, sticky=NSEW)
-    canva_vendedor = FigureCanvasTkAgg(figura, frame_vendedor)
-    canva_vendedor.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
+    app_prec = Label(frame_fin_precisao, text="", width=1, height=10, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_prec.place(x=0, y=0)
+    app_name_preci = Label(frame_fin_precisao, text="PRECISÃO EM FINALIZAÇÕES", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_name_preci.grid(row=0, column=0, pady=0, padx=20, columnspan=2, sticky=NSEW)
+    canva_prec = FigureCanvasTkAgg(figura, frame_fin_precisao)
+    canva_prec.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
 
     # ------------------------------------------------------------------------------------------------------
     # Escanteios
@@ -292,11 +303,15 @@ def grafico_partida(id_partida):
     app_nome_esc = Label(frame_escanteio, text="ESCANTEIOS", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
     app_nome_esc.place(x=20, y=5)
 
-    app_tim1_esc = Label(frame_escanteio, text=f"{dados.loc[0, 'time_mandante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    app_tim1_esc = Label(frame_escanteio, text=f"{dados.loc[0, 'time_mandante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg='black')
     app_tim1_esc.place(x=20, y=35)
+    qtd_esc_mandante = Label(frame_escanteio, text=f"{dados.loc[0, 'estatisticas.mandante.escanteios']} 🚩", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
+    qtd_esc_mandante.place(x=45, y=60)
 
-    app_tim2_esc = Label(frame_escanteio, text=f"{dados.loc[0, 'time_visitante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co3)
+    app_tim2_esc = Label(frame_escanteio, text=f"{dados.loc[0, 'time_visitante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg='black')
     app_tim2_esc.place(x=20, y=90)
+    qtd_esc_visitante = Label(frame_escanteio, text=f"{dados.loc[0, 'estatisticas.visitante.escanteios']} 🚩", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
+    qtd_esc_visitante.place(x=45, y=115)
 
     # ------------------------------------------------------------------------------------------------------
     # OUTRO FRAME
