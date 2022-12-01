@@ -56,13 +56,13 @@ def grafico_partida(id_partida):
 
     #------------------------------------------------------------------------------------------------------
     # CAMPEONATO
-    frame_campeonato = Frame(frame_quadros, width=200, height=90,bg=co1, relief="flat")
+    frame_campeonato = Frame(frame_quadros, width=200, height=160,bg=co1, relief="flat")
     frame_campeonato.place(x=0, y=0)
 
     app_camp = Label(frame_campeonato, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
     app_camp.place(x=0, y=0)
 
-    app_nome_camp = Label(frame_campeonato, text="CAMPEONATO", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_camp = Label(frame_campeonato, text="Campeonato", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co4)
     app_nome_camp.place(x=20, y=5)
 
     app_camp = Label(frame_campeonato, text=f"{dados.loc[0, 'campeonato.nome_popular']}", height=1, pady=0, padx=0,relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
@@ -79,7 +79,7 @@ def grafico_partida(id_partida):
     app_pr = Label(frame_cartoes, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
     app_pr.place(x=0, y=0)
 
-    app_nome_rev = Label(frame_cartoes, text="CARTÕES", height=1,pady=0, padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_rev = Label(frame_cartoes, text="Cartões", height=1,pady=0, padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co4)
     app_nome_rev.place(x=20, y=5)
 
     cart_amarelo_mandante   = str(dados.loc[0, 'cartoes.amarelo.mandante'])
@@ -121,7 +121,7 @@ def grafico_partida(id_partida):
     app_esc = Label(frame_escalacao, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
     app_esc.place(x=0, y=0)
 
-    app_nome_esc = Label(frame_escalacao, text="ESCALAÇÕES", height=1,pady=0, padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_esc = Label(frame_escalacao, text="Escalação", height=1,pady=0, padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co4)
     app_nome_esc.place(x=20, y=5)
 
     sigla_time_mand = Label(frame_escalacao, text=f"{dados.loc[0, 'time_mandante.sigla']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 13 bold'), bg=co1, fg=co3)
@@ -173,39 +173,79 @@ def grafico_partida(id_partida):
             nm_tit_visitante.place(x=270, y=y)
         if sg_tit_visitante:
             sg_tit_visitante.place(x=230, y=y)
+    
+    tecnico_mandante = Label(frame_escalacao, text=f"{dados.loc[0, 'escalacoes.mandante.tecnico.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
+    tecnico_mandante.place(x=30, y=360)
+
+    tecnico_visitante = Label(frame_escalacao, text=f"{dados.loc[0, 'escalacoes.visitante.tecnico.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
+    tecnico_visitante.place(x=250, y=360)
 
     # ------------------------------------------------------------------------------------------------------
-    # Posse de bola
-    frame_possebola = Frame(frame_quadros, width=500, height=200, bg=co1, relief="flat")
-    frame_possebola.place(x=420, y=0)
+    # Escanteios
+    frame_escanteio = Frame(frame_quadros, width=200,height=160, bg=co1, relief="flat",)
+    frame_escanteio.place(x=420, y=0)
 
-    posse_bola_mandante  = str(dados.loc[0, 'estatisticas.mandante.posse_de_bola']).replace('%','')
-    posse_bola_visitante = str(dados.loc[0, 'estatisticas.visitante.posse_de_bola']).replace('%','')
+    app_esc = Label(frame_escanteio, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_esc.place(x=0, y=0)
 
-    times           = [f"{dados.loc[0,'time_mandante.nome_popular']}", f"{dados.loc[0, 'time_visitante.nome_popular']}"]
-    vlr_posses_bola = [int(posse_bola_mandante), int(posse_bola_visitante)]
-    
-    figura = plt.Figure(figsize=(11, 2), dpi=93)
-    canva  = FigureCanvasTkAgg(figura, frame_possebola)
-    canva.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
-    
-    ax = figura.add_subplot()
-    a = ax.barh(times, vlr_posses_bola)
-    ax.bar_label(a, fmt='%1.1f%%')
+    app_nome_esc = Label(frame_escanteio, text="Escanteios", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co4)
+    app_nome_esc.place(x=20, y=5)
 
-    app_pr = Label(frame_possebola, text="", width=1, height=10, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
-    app_pr.place(x=0, y=0)
-    app_nome_rev = Label(frame_possebola, text="POSSE DE BOLA", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
-    app_nome_rev.grid(row=0, column=0, padx=20, pady=0, sticky=NSEW)
+    app_tim1_esc = Label(frame_escanteio, text=f"{dados.loc[0, 'time_mandante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg='black')
+    app_tim1_esc.place(x=20, y=35)
+    qtd_esc_mandante = Label(frame_escanteio, text=f"{dados.loc[0, 'estatisticas.mandante.escanteios']} 🚩", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
+    qtd_esc_mandante.place(x=45, y=60)
+
+    app_tim2_esc = Label(frame_escanteio, text=f"{dados.loc[0, 'time_visitante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg='black')
+    app_tim2_esc.place(x=20, y=90)
+    qtd_esc_visitante = Label(frame_escanteio, text=f"{dados.loc[0, 'estatisticas.visitante.escanteios']} 🚩", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
+    qtd_esc_visitante.place(x=45, y=115)
+
+    # ------------------------------------------------------------------------------------------------------
+    # OUTRO FRAME
+
+    frame_ex1 = Frame(frame_quadros, width=200,height=160, bg=co1, relief="flat",)
+    frame_ex1.place(x=630, y=0)
+
+    app_ex1 = Label(frame_ex1, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_ex1.place(x=0, y=0)
+
+    app_nome_ex1 = Label(frame_ex1, text="FRAME 1", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_ex1.place(x=20, y=5)
+
     
+    # ------------------------------------------------------------------------------------------------------
+    # OUTRO FRAME
+
+    frame_ex2 = Frame(frame_quadros, width=200,height=160, bg=co1, relief="flat",)
+    frame_ex2.place(x=840, y=0)
+
+    app_ex2 = Label(frame_ex2, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_ex2.place(x=0, y=0)
+
+    app_nome_ex2 = Label(frame_ex2, text="FRAME 2", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_ex2.place(x=20, y=5)
+
+    # ------------------------------------------------------------------------------------------------------
+    # OUTRO FRAME
+
+    frame_ex3 = Frame(frame_quadros, width=200,height=160, bg=co1, relief="flat",)
+    frame_ex3.place(x=1050, y=0)
+
+    app_ex3 = Label(frame_ex3, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_ex3.place(x=0, y=0)
+
+    app_nome_ex3 = Label(frame_ex3, text="FRAME 3", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_ex3.place(x=20, y=5)
+
     # ------------------------------------------------------------------------------------------------------
     # POSSE DE BOLA
 
-    frame_poss_bola = Frame(frame_quadros, width=200,height=200, bg=co1, relief="flat",)
-    frame_poss_bola.place(x=420, y=230)
+    frame_poss_bola = Frame(frame_quadros, width=200,height=200, bg=co1, relief="flat")
+    frame_poss_bola.place(x=420, y=175)
 
     # faça figura e atribua objetos de eixo
-    figura = plt.Figure(figsize=(5.15, 4), dpi=80)
+    figura = plt.Figure(figsize=(5.13, 4), dpi=80)
     ax = figura.add_subplot(111)
 
     mand_posse_bola = str(dados.loc[0, 'estatisticas.mandante.posse_de_bola']).replace('%','')
@@ -228,7 +268,7 @@ def grafico_partida(id_partida):
 
     app_poss = Label(frame_poss_bola, text="", width=1, height=10, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
     app_poss.place(x=0, y=0)
-    app_posse = Label(frame_poss_bola, text="POSSE DE BOLA", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_posse = Label(frame_poss_bola, text="Posse de bola", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 11 bold'), bg=co1, fg=co4)
     app_posse.grid(row=0, column=0, pady=0, padx=20, columnspan=2, sticky=NSEW)
     canva_posse = FigureCanvasTkAgg(figura, frame_poss_bola)
     canva_posse.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
@@ -239,18 +279,17 @@ def grafico_partida(id_partida):
     # Faturamento por Vendedores 
 
     frame_fin_precisao = Frame(frame_quadros, width=200, height=200,bg=co1, relief="flat",)
-    frame_fin_precisao.place(x=840, y=230)
+    frame_fin_precisao.place(x=840, y=175)
 
     # faça figura e atribua objetos de eixo
     figura = plt.Figure(figsize=(7.3, 4.6), dpi=70)
     ax = figura.add_subplot(111)
 
     mand_finalizacao_precisao = str(dados.loc[0, 'estatisticas.mandante.finalizacao.precisao']).replace('%','')
-    vis_finalizacao_precisao = str(dados.loc[0, 'estatisticas.visitante.finalizacao.precisao']).replace('%','')
+    vis_finalizacao_precisao  = str(dados.loc[0, 'estatisticas.visitante.finalizacao.precisao']).replace('%','')
 
     # Finalizacoes
     finalizacao_total = [int(mand_finalizacao_precisao), int(vis_finalizacao_precisao)]
-
 
     # times
     times_finzalicao = [str(dados.loc[0, 'time_mandante.nome_popular']), str(dados.loc[0, 'time_visitante.nome_popular'])]
@@ -287,68 +326,35 @@ def grafico_partida(id_partida):
 
     app_prec = Label(frame_fin_precisao, text="", width=1, height=10, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
     app_prec.place(x=0, y=0)
-    app_name_preci = Label(frame_fin_precisao, text="PRECISÃO EM FINALIZAÇÕES", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_name_preci = Label(frame_fin_precisao, text="Precisão em finalizações", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 11 bold'), bg=co1, fg=co4)
     app_name_preci.grid(row=0, column=0, pady=0, padx=20, columnspan=2, sticky=NSEW)
     canva_prec = FigureCanvasTkAgg(figura, frame_fin_precisao)
     canva_prec.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
 
-    # ------------------------------------------------------------------------------------------------------
-    # Escanteios
-    frame_escanteio = Frame(frame_quadros, width=200,height=180, bg=co1, relief="flat",)
-    frame_escanteio.place(x=420, y=580)
-
-    app_esc = Label(frame_escanteio, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
-    app_esc.place(x=0, y=0)
-
-    app_nome_esc = Label(frame_escanteio, text="ESCANTEIOS", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
-    app_nome_esc.place(x=20, y=5)
-
-    app_tim1_esc = Label(frame_escanteio, text=f"{dados.loc[0, 'time_mandante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg='black')
-    app_tim1_esc.place(x=20, y=35)
-    qtd_esc_mandante = Label(frame_escanteio, text=f"{dados.loc[0, 'estatisticas.mandante.escanteios']} 🚩", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
-    qtd_esc_mandante.place(x=45, y=60)
-
-    app_tim2_esc = Label(frame_escanteio, text=f"{dados.loc[0, 'time_visitante.nome_popular']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg='black')
-    app_tim2_esc.place(x=20, y=90)
-    qtd_esc_visitante = Label(frame_escanteio, text=f"{dados.loc[0, 'estatisticas.visitante.escanteios']} 🚩", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 11 bold'), bg=co1, fg=co3)
-    qtd_esc_visitante.place(x=45, y=115)
 
     # ------------------------------------------------------------------------------------------------------
-    # OUTRO FRAME
+    # Posse de bola
+    frame_possebola = Frame(frame_quadros, width=500, height=200, bg=co1, relief="flat")
+    frame_possebola.place(x=420, y=580)
 
-    frame_ex1 = Frame(frame_quadros, width=200,height=180, bg=co1, relief="flat",)
-    frame_ex1.place(x=630, y=580)
+    posse_bola_mandante  = str(dados.loc[0, 'estatisticas.mandante.posse_de_bola']).replace('%','')
+    posse_bola_visitante = str(dados.loc[0, 'estatisticas.visitante.posse_de_bola']).replace('%','')
 
-    app_ex1 = Label(frame_ex1, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
-    app_ex1.place(x=0, y=0)
+    times           = [f"{dados.loc[0,'time_mandante.nome_popular']}", f"{dados.loc[0, 'time_visitante.nome_popular']}"]
+    vlr_posses_bola = [int(posse_bola_mandante), int(posse_bola_visitante)]
+    
+    figura = plt.Figure(figsize=(11, 2), dpi=93)
+    canva  = FigureCanvasTkAgg(figura, frame_possebola)
+    canva.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
+    
+    ax = figura.add_subplot()
+    a  = ax.barh(times, vlr_posses_bola)
+    ax.bar_label(a, fmt='%1.1f%%')
 
-    app_nome_ex1 = Label(frame_ex1, text="FRAME 1", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
-    app_nome_ex1.place(x=20, y=5)
-
-    # ------------------------------------------------------------------------------------------------------
-    # OUTRO FRAME
-
-    frame_ex2 = Frame(frame_quadros, width=200,height=180, bg=co1, relief="flat",)
-    frame_ex2.place(x=840, y=580)
-
-    app_ex2 = Label(frame_ex2, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
-    app_ex2.place(x=0, y=0)
-
-    app_nome_ex2 = Label(frame_ex2, text="FRAME 2", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
-    app_nome_ex2.place(x=20, y=5)
-
-    # ------------------------------------------------------------------------------------------------------
-    # OUTRO FRAME
-
-    frame_ex3 = Frame(frame_quadros, width=200,height=180, bg=co1, relief="flat",)
-    frame_ex3.place(x=1050, y=580)
-
-    app_ex3 = Label(frame_ex3, text="", width=1, height=10,pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
-    app_ex3.place(x=0, y=0)
-
-    app_nome_ex3 = Label(frame_ex3, text="FRAME 3", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Ivy 10 bold'), bg=co1, fg=co4)
-    app_nome_ex3.place(x=20, y=5)
-
+    app_pr = Label(frame_possebola, text="", width=1, height=10, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 1 bold'), bg=co2, fg=co4)
+    app_pr.place(x=0, y=0)
+    app_nome_rev = Label(frame_possebola, text="xxxxx", height=1, pady=0, padx=0, relief="flat", anchor=NW, font=('Ivy 10 bold'), bg=co1, fg=co4)
+    app_nome_rev.grid(row=0, column=0, padx=20, pady=0, sticky=NSEW)
 
 
     janela.mainloop()
