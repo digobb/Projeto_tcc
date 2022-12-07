@@ -13,7 +13,7 @@ def retorna_campeonatos():
     response    = requests.request("GET", url_api, headers=headers)
     status      = requests.get(url_api, headers=headers)
     print(f'---------------------- status: {status} ----------------------')
-    print(response.json())
+    #print(response.json())
     return response
 
 def retorna_campeonato_brasileiro():
@@ -21,7 +21,7 @@ def retorna_campeonato_brasileiro():
     response = requests.request("GET", url_api, headers=headers)
     status   = requests.get(url_api, headers=headers)
     print(f'---------------------- status: {status} ----------------------')
-    print(response.json())
+    #print(response.json())
     return response
 
 def retorna_tabela_campeonato_brasileiro():
@@ -29,7 +29,7 @@ def retorna_tabela_campeonato_brasileiro():
     response = requests.request("GET", url_api, headers=headers)
     status   = requests.get(url_api, headers=headers)
     print(f'---------------------- status: {status} ----------------------')
-    print(response.json())
+    #print(response.json())
     return response
 
 def retorna_artilheiros_campeonato_brasileiro():
@@ -37,7 +37,7 @@ def retorna_artilheiros_campeonato_brasileiro():
     response = requests.request("GET", url_api, headers=headers)
     status   = requests.get(url_api, headers=headers)
     print(f'---------------------- status: {status} ----------------------')
-    print(response.json())
+    #print(response.json())
     return response
 
 def retorna_rodada_atual_campeonato_brasileiro():
@@ -45,7 +45,7 @@ def retorna_rodada_atual_campeonato_brasileiro():
     response = requests.request("GET", url_api, headers=headers)
     status   = requests.get(url_api, headers=headers)
     print(f'---------------------- status: {status} ----------------------')
-    print(response.json())
+    #print(response.json())
     return response
 
 # DADOS DAS PARTIDAS
@@ -62,7 +62,7 @@ def retorna_jogos_ao_vivo():
     response = requests.request("GET", url_api, headers=headers)
     status   = requests.get(url_api, headers=headers)
     print(f'---------------------- status: {status} ----------------------')
-    print(response.json())
+    #print(response.json())
     return response.json()
 
 def retorna_dados_partida(id_partida):
@@ -71,7 +71,7 @@ def retorna_dados_partida(id_partida):
     response = requests.request("GET", url_api, headers=headers)
     status   = requests.get(url_api, headers=headers)
     print(f'---------------------- status: {status} ----------------------')
-    print(response.json())
+    #print(response.json())
     return response.json()
 
 #retorna_dados_partida(id_partida="320")

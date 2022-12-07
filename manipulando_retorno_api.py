@@ -1,4 +1,4 @@
-import re
+import re, os
 import pandas as pd
 from api import *
 
@@ -38,6 +38,6 @@ def chama_retorno_jogos_aovivo():
             print(f'Apagando... {nm_campeonato}')
             df_jogos_aovivo.drop(index=pos, inplace=True)
 
-    df_jogos_aovivo.to_csv(r"C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/jogos_aovivo.csv", encoding='utf-8', index=False)
+    df_jogos_aovivo.to_csv(rf"C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/arquivo/jogos_aovivo.csv", encoding='utf-8', index=False)
     return True
     

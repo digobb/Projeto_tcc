@@ -1,9 +1,5 @@
-from asyncore import read
 from distutils.cmd import Command
 from tkinter import *
-from tkinter import ttk
-from turtle import position
-from PIL import Image, ImageTk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import pandas as pd
@@ -12,33 +8,30 @@ import numpy as np
 import os
 import re
 import json
-
-#dados = pd.read_csv(r'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/teste_dtf.csv')
     
 def grafico_partida(id_partida):
 
     # VERIFICA SE ARQUIVO CONTENDO OS DADOS DA PARTIDA EXISTEM.
-    if os.path.exists(f'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv'):
+    if os.path.exists(f'C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv'):
         print('Arquivo com dados da partida encontrados!')
-        dados = pd.read_csv(f'C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv')
+        dados = pd.read_csv(f'C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv')
     else:
         print('Nao foi encontrado arquivo com dados da partida')
     
     ################# cores ###############
-    co0 = "#f0f3f5"  # Preta
-    co1 = "#feffff"  # branca
-    co2 = "#6f9fbd"  # azul
-    co3 = "#38576b"  # valor
-    co4 = "#403d3d"  # para letra
-    co5 = "#e06636"   
-    co6 = "#6dd695" 
-
+    co0   = "#f0f3f5"  # Preta
+    co1   = "#feffff"  # branca
+    co2   = "#6f9fbd"  # azul
+    co3   = "#38576b"  # valor
+    co4   = "#403d3d"  # para letra
+    co5   = "#e06636"   
+    co6   = "#6dd695" 
     fundo = "#3F729B"
 
     janela = Tk()
-    janela.iconbitmap('C:/Users/didico/Documents/Projeto_TCC/projeto_tcc/img/icon.ico')
+    janela.iconbitmap(f'C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/img/icon.ico')
     janela['background']='white'
-    #janela.state('zoomed')
+    janela.state('zoomed')
     janela.title(f'Estatisticas: {dados.loc[0, "time_mandante.nome_popular"]} x {dados.loc[0, "time_visitante.nome_popular"]}')
 
     ################# Frames ####################
@@ -75,10 +68,17 @@ def grafico_partida(id_partida):
     app_nome_camp.place(x=20, y=5)
 
     app_camp = Label(frame_campeonato, text=f"{dados.loc[0, 'campeonato.nome_popular']}", height=1, pady=0, padx=0,relief="flat", anchor=CENTER, font=('Roboto 12 bold'), bg=co1, fg=co3)
-    app_camp.place(x=55, y=35)
+    app_camp.place(x=55, y=40)
 
+    app_fase = Label(frame_campeonato, text="Rodada Atual", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Roboto 9 bold'), bg=co1, fg=co3)
+    app_fase.place(x=15, y=110)
     app_nome_rodada = Label(frame_campeonato, text=f"{dados.loc[0, 'rodada']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Roboto 8 bold'), bg=co1, fg=co6)
-    app_nome_rodada.place(x=60, y=70)
+    app_nome_rodada.place(x=30, y=130)
+
+    app_tipo_fase = Label(frame_campeonato, text="Fase Atual", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Roboto 9 bold'), bg=co1, fg=co3)
+    app_tipo_fase.place(x=15, y=70)
+    app_nome_tipo_fase = Label(frame_campeonato, text=f"{dados.loc[0, 'campeonato.fase_atual.tipo']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Roboto 8 bold'), bg=co1, fg=co6)
+    app_nome_tipo_fase.place(x=30, y=90)
 
     #------------------------------------------------------------------------------------------------------
     # Cartoes
@@ -138,7 +138,13 @@ def grafico_partida(id_partida):
 
     sigla_time_vis = Label(frame_escalacao, text=f"{dados.loc[0, 'time_visitante.sigla']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Roboto 13 bold'), bg=co1, fg=co3)
     sigla_time_vis.place(x=270, y=40)
+    
+    esq_tatico_mand = Label(frame_escalacao, text=f"{dados.loc[0, 'escalacoes.mandante.esquema_tatico']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Roboto 8 bold'), bg=co1, fg='#32CD32')
+    esq_tatico_mand.place(x=115, y=45)
 
+    esq_tatico_visit = Label(frame_escalacao, text=f"{dados.loc[0, 'escalacoes.visitante.esquema_tatico']}", height=1, pady=0,padx=0, relief="flat", anchor=CENTER, font=('Roboto 8 bold'), bg=co1, fg='#32CD32')
+    esq_tatico_visit.place(x=315, y=45)
+    
     y = int(50)
     for jogador in range(11):
         # Numero camisa titular mandate

@@ -1,0 +1,2 @@
+partida_id,campeonato,placar,time_mandante,time_visitante,placar_mandante,placar_visitante,disputa_penalti,status,slug,data_realizacao,hora_realizacao,data_realizacao_iso,estadio,_link
+423,Copa do Brasil,Santo André 4x1 Criciúma,Santo André,Criciúma,4,1,False,andamento,santo-andre-criciuma-05-02-2020,05/02/2020,16:30,2020-02-05T16:30:00-0300,Bruno José Daniel,423
