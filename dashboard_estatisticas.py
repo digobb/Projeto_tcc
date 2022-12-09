@@ -2,6 +2,7 @@ from distutils.cmd import Command
 from tkinter import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+from api import retorna_dados_partida
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,13 +11,13 @@ import re
 import json
     
 def grafico_partida(id_partida):
-
     # VERIFICA SE ARQUIVO CONTENDO OS DADOS DA PARTIDA EXISTEM.
     if os.path.exists(f'C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv'):
         print('Arquivo com dados da partida encontrados!')
         dados = pd.read_csv(f'C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv')
     else:
         print('Nao foi encontrado arquivo com dados da partida')
+        raise Exception('Não foi encontrado aquivo com dados da partida')
     
     ################# cores ###############
     co0   = "#f0f3f5"  # Preta
@@ -33,7 +34,20 @@ def grafico_partida(id_partida):
     janela['background']='white'
     janela.state('zoomed')
     janela.title(f'Estatisticas: {dados.loc[0, "time_mandante.nome_popular"]} x {dados.loc[0, "time_visitante.nome_popular"]}')
-
+    
+    def atualiza_tela():
+        def re():
+            dados = retorna_dados_partida(id_partida=id_partida)
+            df_dados_partida = pd.json_normalize(dados)
+            #os.remove(f"C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv")
+            df_dados_partida.to_csv(f"C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv", encoding='utf-8')
+            #janela.update()
+            janela.destroy()
+            grafico_partida(id_partida)
+        janela.after(10000, re)
+        print('atualizou')
+        janela.update()
+    
     ################# Frames ####################
     # Neste frame iremos Mostrar o nome do Aplicativo
     frame_app_nome = Frame(janela, width=1370, height=40, pady=0,padx=0, bg=co1,  relief="flat")
@@ -365,6 +379,8 @@ def grafico_partida(id_partida):
     app_name_preci.grid(row=0, column=0, pady=0, padx=20, columnspan=2, sticky=NSEW)
     canva_prec = FigureCanvasTkAgg(figura, frame_fin_precisao)
     canva_prec.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
+
+    atualiza_tela()
 
 
     # ------------------------------------------------------------------------------------------------------
