@@ -19,6 +19,12 @@ def grafico_partida(id_partida):
         print('Nao foi encontrado arquivo com dados da partida')
         raise Exception('Não foi encontrado aquivo com dados da partida')
     
+    janela = Tk()
+    janela.iconbitmap(f'C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/img/icon.ico')
+    janela['background']='white'
+    janela.state('zoomed')
+    janela.title(f'Estatisticas: {dados.loc[0, "time_mandante.nome_popular"]} x {dados.loc[0, "time_visitante.nome_popular"]}')
+    
     ################# cores ###############
     co0   = "#f0f3f5"  # Preta
     co1   = "#feffff"  # branca
@@ -29,24 +35,6 @@ def grafico_partida(id_partida):
     co6   = "#6dd695" 
     fundo = "#3F729B"
 
-    janela = Tk()
-    janela.iconbitmap(f'C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/img/icon.ico')
-    janela['background']='white'
-    janela.state('zoomed')
-    janela.title(f'Estatisticas: {dados.loc[0, "time_mandante.nome_popular"]} x {dados.loc[0, "time_visitante.nome_popular"]}')
-    
-    def atualiza_tela():
-        def re():
-            dados = retorna_dados_partida(id_partida=id_partida)
-            df_dados_partida = pd.json_normalize(dados)
-            #os.remove(f"C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv")
-            df_dados_partida.to_csv(f"C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv", encoding='utf-8')
-            #janela.update()
-            janela.destroy()
-            grafico_partida(id_partida)
-        janela.after(10000, re)
-        print('atualizou')
-        janela.update()
     
     ################# Frames ####################
     # Neste frame iremos Mostrar o nome do Aplicativo
@@ -69,6 +57,30 @@ def grafico_partida(id_partida):
     else:
         app_nome_status = Label(frame_app_nome, text=f"{status}", width=10, height=2,pady=1, padx=0, relief="flat", anchor=N, font=('Roboto 10 bold'), bg=co1, fg='#32CD32')
     app_nome_status.place(x=80, y=20)
+
+    id_simulacao = 0
+    def atualiza_partida():
+        #id_simulacao = id_simulacao + 1
+        #dados = retorna_dados_partida(id_partida=id_partida)
+        #df_dados_partida = pd.json_normalize(dados)
+        #os.remove(f"C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv")
+        janela.destroy()
+        grafico_partida(1)
+        janela.update()
+
+    '''def atualiza_min():
+        def update():
+            if id_simulacao < 8:
+                id_simulacao = id_simulacao + 1
+            else:
+                breakpoint() 
+            janela.destroy()
+            grafico_partida(id_simulacao)
+        janela.after(60000, update)
+        janela.update()'''
+
+    button_atualizar = Button(janela, text='Atualizar', font=('Roboto', 10), bg='#305EE4', fg='white', command=atualiza_partida)
+    button_atualizar.place(x=850, y=10)
 
     #------------------------------------------------------------------------------------------------------
     # CAMPEONATO
@@ -380,7 +392,8 @@ def grafico_partida(id_partida):
     canva_prec = FigureCanvasTkAgg(figura, frame_fin_precisao)
     canva_prec.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
 
-    atualiza_tela()
+    
+    #atualiza_partida()
 
 
     # ------------------------------------------------------------------------------------------------------
