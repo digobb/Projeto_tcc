@@ -2,6 +2,7 @@ from distutils.cmd import Command
 from tkinter import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+from random import randint
 from api import retorna_dados_partida
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -22,6 +23,8 @@ def grafico_partida(id_partida):
     janela = Tk()
     janela.iconbitmap(f'C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/img/icon.ico')
     janela['background']='white'
+    janela.geometry("1366x768") 
+    janela.minsize(1366, 768)
     janela.state('zoomed')
     janela.title(f'Estatisticas: {dados.loc[0, "time_mandante.nome_popular"]} x {dados.loc[0, "time_visitante.nome_popular"]}')
     
@@ -53,34 +56,32 @@ def grafico_partida(id_partida):
     nm_status = Label(frame_app_nome, text="Status: ", width=10, height=2,pady=1, padx=0, relief="flat", anchor=N, font=('Roboto 10 bold'), bg=co1, fg='black')
     nm_status.place(x=17, y=20)
     if status == "finalizado":
-        app_nome_status = Label(frame_app_nome, text=f"{status}", width=10, height=2,pady=1, padx=0, relief="flat", anchor=N, font=('Roboto 10 bold'), bg=co1, fg='#DC143C')
+        app_nome_status = Label(frame_app_nome, text=f"{status}", width=15, height=2,pady=1, padx=0, relief="flat", anchor=N, font=('Roboto 10 bold'), bg=co1, fg='#DC143C')
     else:
-        app_nome_status = Label(frame_app_nome, text=f"{status}", width=10, height=2,pady=1, padx=0, relief="flat", anchor=N, font=('Roboto 10 bold'), bg=co1, fg='#32CD32')
+        app_nome_status = Label(frame_app_nome, text=f"{status}", width=15, height=2,pady=1, padx=0, relief="flat", anchor=N, font=('Roboto 10 bold'), bg=co1, fg='#32CD32')
     app_nome_status.place(x=80, y=20)
 
-    id_simulacao = 0
-    def atualiza_partida():
-        #id_simulacao = id_simulacao + 1
+    id_simulacao = randint(0, 3)
+    def atualiza_partida(id_simulacao=id_simulacao):
+        id_simulacao = id_simulacao + 1
         #dados = retorna_dados_partida(id_partida=id_partida)
         #df_dados_partida = pd.json_normalize(dados)
         #os.remove(f"C:/Users/{os.getlogin()}/Documents/Projeto_TCC/projeto_tcc/arquivo/dados_partida_{id_partida}.csv")
         janela.destroy()
-        grafico_partida(1)
+        print(id_simulacao)
+        grafico_partida(id_simulacao)
         janela.update()
 
-    '''def atualiza_min():
+    def atualiza_automatico():
         def update():
-            if id_simulacao < 8:
-                id_simulacao = id_simulacao + 1
-            else:
-                breakpoint() 
+            id_simulacao = randint(0, 3) 
             janela.destroy()
             grafico_partida(id_simulacao)
         janela.after(60000, update)
-        janela.update()'''
+        janela.update()
 
     button_atualizar = Button(janela, text='Atualizar', font=('Roboto', 10), bg='#305EE4', fg='white', command=atualiza_partida)
-    button_atualizar.place(x=850, y=10)
+    button_atualizar.place(x=1270, y=10)
 
     #------------------------------------------------------------------------------------------------------
     # CAMPEONATO
@@ -304,11 +305,11 @@ def grafico_partida(id_partida):
     # ------------------------------------------------------------------------------------------------------
     # POSSE DE BOLA
 
-    frame_poss_bola = Frame(frame_quadros, width=200,height=200, bg=co1, relief="flat")
+    frame_poss_bola = Frame(frame_quadros, width=410, height=400, bg=co1, relief="flat")
     frame_poss_bola.place(x=420, y=175)
 
     # faça figura e atribua objetos de eixo
-    figura = plt.Figure(figsize=(5.13, 4), dpi=80)
+    figura = plt.Figure(figsize=(5.13, 4.72), dpi=80)
     ax = figura.add_subplot(111)
 
     mand_posse_bola = str(dados.loc[0, 'estatisticas.mandante.posse_de_bola']).replace('%','')
@@ -343,7 +344,7 @@ def grafico_partida(id_partida):
     frame_fin_precisao.place(x=840, y=175)
 
     # faça figura e atribua objetos de eixo
-    figura = plt.Figure(figsize=(7.3, 4.6), dpi=70)
+    figura = plt.Figure(figsize=(7.3, 5.36), dpi=70)
     ax = figura.add_subplot(111)
 
     mand_finalizacao_precisao = str(dados.loc[0, 'estatisticas.mandante.finalizacao.precisao']).replace('%','')
@@ -393,7 +394,7 @@ def grafico_partida(id_partida):
     canva_prec.get_tk_widget().grid(row=1, column=0, sticky=NSEW)
 
     
-    #atualiza_partida()
+    atualiza_automatico()
 
 
     # ------------------------------------------------------------------------------------------------------
